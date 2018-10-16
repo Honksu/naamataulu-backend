@@ -1,1 +1,1 @@
-web: gunicorn naamataulu.wsgi --preload -b 0.0.0.0:80
+web: gunicorn naamataulu.wsgi --preload -b 0.0.0.0:8000
