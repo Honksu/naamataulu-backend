@@ -18,7 +18,7 @@ pip3 and python3 might be just pip and python depending on your environment.
 *TODO Virtualenv/Docker*
 
 ```bash
-pip3 install -r src/requirements.txt
+pip3 install -r requirements.txt
 cd src/naamataulu
 python3 manage.py makemigrations
 python3 manage.py createsuperuser
