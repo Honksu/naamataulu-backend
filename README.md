@@ -9,7 +9,7 @@ Django first time setup
 pip3 and python3 might be just pip and python depending on your environment.
 *TODO Virtualenv/Docker*
 
-You need environment variable `DJANGO_SECRET_KEY` (Django's SECRET_KEY variable)
+You need environment variables `DJANGO_SECRET_KEY=??? DJANGO_DEBUG=1` (Django's SECRET_KEY variable)
 
 ```bash
 pip3 install -r requirements.txt

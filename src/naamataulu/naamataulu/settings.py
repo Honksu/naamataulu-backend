@@ -21,9 +21,9 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ['DJANGO_DEBUG']
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['naamataulu-backend.herokuapp.com']
 
 
 # Application definition
