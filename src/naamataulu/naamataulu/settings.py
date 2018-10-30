@@ -77,7 +77,16 @@ WSGI_APPLICATION = 'naamataulu.wsgi.application'
 
 DATABASES = {}
 
-DATABASES['default'] = dj_database_url.parse(os.environ['DATABASE_URL'])
+if os.environ['DJANGO_SQLITE']:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'db',
+        }
+    }
+else:
+    DATABASES['default'] = dj_database_url.parse(os.environ['DATABASE_URL'])
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

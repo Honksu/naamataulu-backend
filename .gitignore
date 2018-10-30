@@ -190,3 +190,4 @@ pip-selfcheck.json
 ### Production secrets
 src/naamataulu/naamataulu/secret_settings.py
 .env
+*.sqlite3

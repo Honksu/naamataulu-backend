@@ -19,12 +19,28 @@ you have the required environment variables in `.env` file.
 Template file can be found `template.env`.
 
 ```bash
+DJANGO_SECRET_KEY=          # https://docs.djangoproject.com/en/2.1/ref/settings/#s-secret-key
+DJANGO_DEBUG=True           # https://docs.djangoproject.com/en/2.1/ref/settings/#s-debug
+DJANGO_SQLITE=              # True if you want to run local sqlite database
+DATABASE_URL=               # Address and credentials of postgres database (Found in Heroku settings)
+DISABLE_COLLECTSTATIC=      # Set true for local
+WEB_CONCURRENCY=            # How many instances of the backend Gunicorn runs (1 is enough for local testing)
+```
+
+```bash
 source ENV/bin/activate
 
 # Run one of these:
-heroku local:release -f Procfile.linux          # Install dependencies and run migrations (Needs to be ran after dependency or database changes)
-heroku local:makemigrations -f Procfile.linux   # manage.py makemigrations (generate migration files after changing the model)
-heroku local:web -f Procfile.linux              # Run the backend
+
+# Install dependencies and run migrations
+# (Needs to be ran after dependency or database changes)
+heroku local release -f Procfile.linux 
+
+# manage.py makemigrations (generate migration files after changing the model)
+heroku local makemigrations -f Procfile.linux   
+
+# Run the backend
+heroku local web -f Procfile.linux              
 ```
 
 ### Without Heroku
@@ -37,5 +53,5 @@ After loading environment variables and installing dependencies, the backend sho
 If you modify the models (models.py) make sure to create migration files so they can be ran by other developers / production environment!
 
 ```bash
-heroku local:makemigrations -f Procfile.linux
+heroku local makemigrations -f Procfile.linux
 ```
