@@ -1,6 +1,9 @@
 class FaceRecognitionInterface:
     def __init__(self, imp):
-        self.imp = imp # Implementing class
+        self.imp = imp() # Implementing class
+
+    def __str__(self):
+        return str(self.imp)
 
     # Return features in string format to be stored in database
     def get_features(self, faces):

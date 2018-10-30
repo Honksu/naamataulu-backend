@@ -191,3 +191,4 @@ pip-selfcheck.json
 src/naamataulu/naamataulu/secret_settings.py
 .env
 *.sqlite3
+src/naamataulu/db

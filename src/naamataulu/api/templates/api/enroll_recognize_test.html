@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>Enroll/Recognition tester</title>
+    </head>
+    <body>
+        <div>
+            <h1>Enroll</h1>
+            <form action="/api/v1/users/1/enroll/" method="post" enctype="multipart/form-data">
+                <input type="file" name="faces" multiple>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <div>
+            <h1>Recognize</h1>
+            <form action="/api/v1/users/recognize/" method="post" enctype="multipart/form-data">
+                <input type="file" name="faces" multiple>
+                <input type="submit" value="Submit">
+            </form>            
+        </div>
+    </body>
+</html>
