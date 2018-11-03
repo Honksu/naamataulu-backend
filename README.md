@@ -2,20 +2,9 @@
 
 ## Setting up the environment
 
-### Virtualenv
-You need to setup virtualenv to make sure you are using right package versions:
+### Environment variables
 
-```bash
-# Linux
-pip install virtualenv                      
-virtualenv ENV --python=/usr/bin/python3.6      # We are using Python 3.6
-source ENV/bin/activate                         # Activate environment
-```
-
-### Using Heroku local
-
-Before running the backend locally make sure you have Heroku CLI installed and
-you have the required environment variables in `.env` file.
+You need to have the required environment variables in `.env` file.
 Template file can be found `template.env`.
 
 ```bash
@@ -25,33 +14,44 @@ DJANGO_SQLITE=              # True if you want to run local sqlite database
 DATABASE_URL=               # Address and credentials of postgres database (Found in Heroku settings)
 DISABLE_COLLECTSTATIC=      # Set true for local
 WEB_CONCURRENCY=            # How many instances of the backend Gunicorn runs (1 is enough for local testing)
+PORT=                       # TCP port the service listens to
 ```
+
+### Without Docker
+
+If you are able to install the dependencies locally without Docker the backend should run just fine after you have passed the environment variables.
+
+#### Virtualenv
+You need to setup virtualenv to make sure you are using right package versions:
 
 ```bash
-source ENV/bin/activate
-
-# Run one of these:
-
-# Install dependencies and run migrations
-# (Needs to be ran after dependency or database changes)
-heroku local release -f Procfile.linux 
-
-# manage.py makemigrations (generate migration files after changing the model)
-heroku local makemigrations -f Procfile.linux   
-
-# Run the backend
-heroku local web -f Procfile.linux              
+# Linux
+pip install virtualenv                      
+virtualenv ENV --python=/usr/bin/python3.6      # We are using Python 3.6
+source ENV/bin/activate                         # Activate environment
 ```
 
-### Without Heroku
+### Docker
+```bash
+# Build
+docker build -t naamataulu-backend:latest
 
-If you don't want to install Heroku you take a peek at Procfiles to determine what you need to run.
-After loading environment variables and installing dependencies, the backend should run just fine.
+# Run
+docker run --env-file .env -p 8000:8000 -it naamataulu-backend
+
+# Release (Requires crendentials to wackymemes Docker hub organization.)
+docker build -t wackymemes/naamataulu-backend:latest
+docker push wackymemes/naamataulu-backend:latest
+```
 
 ## Modifying the model
 
 If you modify the models (models.py) make sure to create migration files so they can be ran by other developers / production environment!
 
+You need to be able to run the environment locally to make migration files. If you have problems installing some packages you can try disabling them since the makemigrations should only depend on Django.
+
 ```bash
-heroku local makemigrations -f Procfile.linux
+python manage.py makemigrations
 ```
+
+After running the command there should be a new migration file in ```src/naamataulu/api/migrations```.
