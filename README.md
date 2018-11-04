@@ -20,6 +20,7 @@ PORT=                       # TCP port the service listens to
 ### Without Docker
 
 If you are able to install the dependencies locally without Docker the backend should run just fine after you have passed the environment variables.
+(See ```run.sh```)
 
 #### Virtualenv
 You need to setup virtualenv to make sure you are using right package versions:
