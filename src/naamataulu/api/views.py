@@ -11,12 +11,14 @@ from django.http import HttpResponse
 import cv2
 import numpy as np
 
+
+
 from .serializers import UserSerializer
 from .models import User
 
 from .face_recognition.face_recognition_facade import FaceRecognitionFacade
 
-DEFAULT_IMPLEMENTER = 'template' # TODO this to database?
+DEFAULT_IMPLEMENTER = 'dlib' # TODO this to database?
 
 # Testing view for enrollment and recognition
 def enroll_recognize_test(request):
@@ -27,7 +29,7 @@ def enroll_recognize_test(request):
 def requestFaceToNp(request_faces):
         np_faces = []
         for face in request_faces:
-                print(face)
+                #print(face)
                 face_bytes = np.asarray(bytearray(face.read()), dtype=np.uint8)
                 np_faces.append(cv2.imdecode(face_bytes, cv2.IMREAD_COLOR))
         

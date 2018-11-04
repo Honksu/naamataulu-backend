@@ -15,14 +15,15 @@ import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+SECRET_KEY='salaisuus'
+#SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ['DJANGO_DEBUG']
+DEBUG = True
+#DEBUG = os.environ['DJANGO_DEBUG']
 
 ALLOWED_HOSTS = ['naamataulu-backend.herokuapp.com', 'api.wackymemes.com', 'localhost']
 
@@ -76,7 +77,13 @@ WSGI_APPLICATION = 'naamataulu.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {}
-
+DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'db',
+        }
+    }
+'''	
 if os.environ['DJANGO_SQLITE']:
     DATABASES = {
         'default': {
@@ -86,7 +93,7 @@ if os.environ['DJANGO_SQLITE']:
     }
 else:
     DATABASES['default'] = dj_database_url.parse(os.environ['DATABASE_URL'])
-
+'''
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
