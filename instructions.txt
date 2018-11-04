@@ -1,0 +1,13 @@
+Here's the instructions how to currently run the backend:
+
+clear the database at use and set it properly in settings.py
+
+start the server
+
+go to api/v1/users and create a user with null features and null implementer(proper user creation is TODO)
+
+go to api/v1/test and enroll an image to the database, this overrides the existing user's features and implementer
+
+go to run api/v1/test and recognise with a different image of the same person, the response should be 200 OK
+
+if you have server console, the distance between the user in the database and the image to be recognised is printed
