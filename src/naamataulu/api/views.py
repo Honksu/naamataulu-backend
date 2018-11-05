@@ -11,8 +11,6 @@ from django.http import HttpResponse
 import cv2
 import numpy as np
 
-
-
 from .serializers import UserSerializer
 from .models import User
 
@@ -29,9 +27,14 @@ def enroll_recognize_test(request):
 def requestFaceToNp(request_faces):
         np_faces = []
         for face in request_faces:
-                #print(face)
+                print(face)
                 face_bytes = np.asarray(bytearray(face.read()), dtype=np.uint8)
                 np_faces.append(cv2.imdecode(face_bytes, cv2.IMREAD_COLOR))
+        
+        print(len(np_faces))            # N images
+        print(len(np_faces[0]))         # Image height
+        print(len(np_faces[0][0]))      # Image width
+        print(len(np_faces[0][0][0]))   # N channels
         
         return np_faces
 
