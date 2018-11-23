@@ -193,3 +193,6 @@ src/naamataulu/naamataulu/secret_settings.py
 *.sqlite3
 src/naamataulu/db
 .vscode/
+
+# Test faces
+src/naamataulu/api/tests/faces/*
