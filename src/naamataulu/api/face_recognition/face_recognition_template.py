@@ -61,12 +61,10 @@ class DlibFaceRecognition:
         #Converting the retrieved string from the database to array
         compared = compared_features.replace('[','')
         compared = compared.replace(']','')
-        print(compared)
         comparison = []
         for x in compared.split(' '):
             string = x
             if (not string.isspace()) and (not(len(string)<2)):
-                print(string)
                 flotari = float(string)
                 comparison.append(flotari)
                 
@@ -74,11 +72,9 @@ class DlibFaceRecognition:
         comparison = np.array(comparison)
         #compared_features = np.array(compared_features)
         feature = np.array(list(feature))
-        print(comp)
-        print(feature)
         difference = np.subtract(feature, comp)
         distance = np.linalg.norm(difference, axis=None)
-        print(distance)
+    
         return distance
 
         #return random.random()
