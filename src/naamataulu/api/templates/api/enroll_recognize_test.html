@@ -1,11 +1,16 @@
 <html>
     <head>
         <title>Enroll/Recognition tester</title>
+        <script
+			  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+			  integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+			  crossorigin="anonymous"></script>
     </head>
     <body>
         <div>
             <h1>Enroll</h1>
-            <form action="/api/v1/users/1/enroll/" method="post" enctype="multipart/form-data">
+            <input id="user-id" type="text" name="userID">
+            <form id="enroll-form" action="/api/v1/users/1/enroll/" method="post" enctype="multipart/form-data">
                 <input type="file" name="faces" multiple>
                 <input type="submit" value="Submit">
             </form>
@@ -18,4 +23,13 @@
             </form>            
         </div>
     </body>
+    <script>
+        $( document ).ready(function() {
+            $( "#user-id" ).on('input', function(e) {
+                var userID = e.target.value;
+                $("#enroll-form").attr("action", "/api/v1/users/"+userID+"/enroll/");
+
+            });
+        });
+    </script>
 </html>
