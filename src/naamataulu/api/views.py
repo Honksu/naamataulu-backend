@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action, parser_classes
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from django.template import loader
 from django.http import HttpResponse
@@ -41,6 +42,7 @@ def requestFaceToNp(request_faces):
 class UserViewSet(viewsets.ModelViewSet):
         queryset = User.objects.all()
         serializer_class = UserSerializer
+        permission_classes = (IsAuthenticated,)
 
         @action(detail=True, methods=['post'])
         @parser_classes((MultiPartParser,))
