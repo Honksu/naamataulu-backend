@@ -37,24 +37,21 @@ class DlibFaceRecognition:
         width = len(target_face[0][0])
         channels = len(target_face[0][0][0])
 
-        image= np.reshape(target_face, (height, width, channels))
-        cv2.imwrite("laervi.png", image)
-        main_face = cv2.imread("laervi.png")
+        cropped_face = np.reshape(target_face, (height, width, channels))
 
         UPSAMPLING_FACTOR = 0
         faces = [
-            (face.height() * face.width(), shape_predictor(main_face, face))
-            for face in face_detector(main_face, UPSAMPLING_FACTOR)
+            (face.height() * face.width(), shape_predictor(cropped_face, face))
+            for face in face_detector(cropped_face, UPSAMPLING_FACTOR)
         ]
 
 
         faces = sorted(faces, reverse=True)
         det_face = faces[0]
         detected_face = det_face[1]
-        face_vector = np.array(face_recognition.compute_face_descriptor(main_face, detected_face)).astype(float)
+        face_vector = np.array(face_recognition.compute_face_descriptor(cropped_face, detected_face)).astype(float)
         return face_vector
         
-        #return str(random.randint(0,10000))
 
     def is_face(self, feature, compared_features):
         
@@ -62,19 +59,11 @@ class DlibFaceRecognition:
         compared = compared_features.replace('[','')
         compared = compared.replace(']','')
         comparison = []
-        for x in compared.split(' '):
-            string = x
-            if (not string.isspace()) and (not(len(string)<2)):
-                flotari = float(string)
-                comparison.append(flotari)
-                
-        comp = np.array(comparison)
-        comparison = np.array(comparison)
-        #compared_features = np.array(compared_features)
+        comparison = np.fromstring(compared, dtype=float, count=128, sep=' ')
+ 
+
         feature = np.array(list(feature))
-        difference = np.subtract(feature, comp)
+        difference = np.subtract(feature, comparison)
         distance = np.linalg.norm(difference, axis=None)
     
         return distance
-
-        #return random.random()

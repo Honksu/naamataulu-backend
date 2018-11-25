@@ -42,7 +42,7 @@ def requestFaceToNp(request_faces):
 class UserViewSet(viewsets.ModelViewSet):
         queryset = User.objects.all()
         serializer_class = UserSerializer
-        permission_classes = (IsAuthenticated,)
+        #permission_classes = (IsAuthenticated,)
 
         @action(detail=True, methods=['post'])
         @parser_classes((MultiPartParser,))
