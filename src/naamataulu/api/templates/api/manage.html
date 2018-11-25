@@ -1,0 +1,115 @@
+<html>
+    <head>
+        <title>Naamapalmu management panel</title>
+        <script
+			  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+			  integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+			  crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="/static/qrcode.min.js"></script>
+        <style>
+          .token img {
+            width: 0em;
+            
+            -webkit-transition: width 0.5s;
+            transition: width 0.5s;
+          }
+
+          .token:hover img {
+            width: 12em;
+            display: block !important;
+          }
+        </style>
+    </head>
+    <body>
+      <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <p>Logged in as {{ current_user }}</p>
+        </div>
+      </div>
+
+      <div class="row">
+      <div class="col-md-8">
+        <h3>Users</h3>
+        <table>
+          <thead>
+            <tr>
+              <td><b>User ID</b></td>
+              <td><b>Username</b></td>
+              <td><b>Enroll</b></td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+              <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>
+                  <form id="enroll-form" action="/api/v1/users/{{ user.id }}/enroll/" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="faces" multiple>
+                    <input type="submit" value="Submit">
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md-4">
+        <h3>Recognize</h3>
+        <form action="/api/v1/users/recognize/" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="faces" multiple>
+            <input type="submit" value="Submit">
+        </form>  
+      </div>
+
+      <div class="col-md-8">
+        <h3>Tokens</h3>
+        <table>
+          <thead>
+            <tr>
+              <td><b>Device</b></td>
+              <td><b>Token</b></td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for token in tokens %}
+              <tr class="token">
+                <td>{{ token.user }}</td>
+                <td>{{ token }}</td>
+                <td><button class="qrcode" id="{{ token }}">show</button></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md-4">
+        <h3>Token QR</h3>
+        <div id="selected-qrcode"></div>
+      </div>
+
+
+
+      </div>
+      </div>
+    </body>
+    <script>
+    $(function() {
+      $('.qrcode').toArray().forEach( function(el) {
+        console.log(el)
+        $(el).click( function() {
+          $("#selected-qrcode").html("")
+          var token = $(this)[0].id;
+          var qrcode = new QRCode("selected-qrcode");
+          qrcode.makeCode(token);
+        })
+      });
+    });
+    </script>
+</html>
