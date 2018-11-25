@@ -21,7 +21,7 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ['DJANGO_DEBUG']
+DEBUG = os.environ['DJANGO_DEBUG'] == 1
 
 ALLOWED_HOSTS = ['naamataulu-backend.herokuapp.com', 'api.wackymemes.com', 'localhost']
 
@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'naamataulu.wsgi.application'
 
 DATABASES = {}
 
-if os.environ['DJANGO_SQLITE']:
+if os.environ['DJANGO_SQLITE'] == 1:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
