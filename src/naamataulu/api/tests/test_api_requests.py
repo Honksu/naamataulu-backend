@@ -44,9 +44,7 @@ class UserTestCase(TestCase):
         response = view(request, pk=1)
         self.assertEqual(response.data['username'], 'Markku')
 
-    # TODO enroll with every user
     def test_user_enroll(self):
-
         # Enrol all users
         start = time.time()
         for subject, faces in self.faces.items():
@@ -127,3 +125,11 @@ class UserTestCase(TestCase):
         view = UserViewSet.as_view({'post': 'recognize'})
         response = view(request, pk=1)
         self.assertEqual(response.status_code, 401)    
+
+    def test_put_last_and_first_name(self):
+        request = self.factory.put('/api/v1/users/1', {'first_name': 'Markku', 'last_name': 'Virtanen'}, format='multipart', HTTP_AUTHORIZATION='Token {}'.format(self.token))
+        view = UserViewSet.as_view({'put': 'partial_update'})
+        response = view(request, pk=1)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(User.objects.get(pk=1).first_name, 'Markku')
+        self.assertEqual(User.objects.get(pk=1).last_name, 'Virtanen')
