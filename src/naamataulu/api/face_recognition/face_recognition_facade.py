@@ -14,7 +14,7 @@ import numpy as np
 
 DEFAULT_IMPLEMENTER = 'dlib'
 MAX_FEATURES_PER_USER = 3
-MULTITHREAD = True
+MULTITHREAD = False
 PROCESS_COUNT = 4
 
 class FaceRecognitionFacade:
