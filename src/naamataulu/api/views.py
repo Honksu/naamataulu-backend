@@ -52,8 +52,11 @@ class UserViewSet(viewsets.ModelViewSet):
                 faces_upload = request.FILES.getlist('faces')
                 faces = requestFaceToNp(faces_upload)
                 f = FaceRecognitionFacade()
-                f.enroll([faces], User.objects.get(pk=pk), DEFAULT_IMPLEMENTER)
-                return Response('Enrollment successful')
+                try:
+                  f.enroll([faces], User.objects.get(pk=pk), DEFAULT_IMPLEMENTER)
+                  return Response('Enrollment successful')
+                except:
+                  return Response('Enrollment failed', status=400)
 
         @action(detail=False, methods=['post'])
         @parser_classes((MultiPartParser,))
@@ -61,7 +64,13 @@ class UserViewSet(viewsets.ModelViewSet):
                 faces_upload = request.FILES.getlist('faces')
                 faces = requestFaceToNp(faces_upload)
                 f = FaceRecognitionFacade()
-                user = f.recognize([faces])
+                
+                # If something goes wrong with recognition return 404
+                try:
+                  user = f.recognize([faces])
+                except:
+                  return Response('User not recognized', status=404)
+
                 if user is None:
                         return Response('User not recognized', status=404)
                 else:
