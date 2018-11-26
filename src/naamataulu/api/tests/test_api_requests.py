@@ -48,13 +48,14 @@ class UserTestCase(TestCase):
         # Enrol all users
         start = time.time()
         for subject, faces in self.faces.items():
-          user = User.objects.create(username=subject)
-          user.save()
-          with open(faces[0], 'rb') as data:
-            request = self.factory.post('/api/v1/users/%d' % user.id, {'faces': data}, format='multipart', HTTP_AUTHORIZATION='Token {}'.format(self.token))
-            view = UserViewSet.as_view({'post': 'enroll'})
-            response = view(request, pk=user.id)
-            self.assertEqual(response.status_code, 200)
+          for i in range(1):
+            user = User.objects.create(username=subject+"_"+str(i))
+            user.save()
+            with open(faces[0], 'rb') as data:
+              request = self.factory.post('/api/v1/users/%d' % user.id, {'faces': data}, format='multipart', HTTP_AUTHORIZATION='Token {}'.format(self.token))
+              view = UserViewSet.as_view({'post': 'enroll'})
+              response = view(request, pk=user.id)
+              self.assertEqual(response.status_code, 200)
 
         print('Enrolled %d users in %f seconds.' % (len(self.faces), time.time()-start))
 
@@ -70,7 +71,7 @@ class UserTestCase(TestCase):
         recognize_times = []
 
         for subject, faces in self.faces.items():
-          user = User.objects.get(username=subject)
+          user = User.objects.get(username=subject+"_0")
           for face in faces:
             start = time.time()
             with open(face, 'rb') as data:
@@ -92,6 +93,7 @@ class UserTestCase(TestCase):
                   false_negatives += 1
                   no_face += 1
                   no_face_imgs.append(face)
+            print('Recognized in %s ms' % ((time.time()-start)*1000))
             recognize_times.append(time.time()-start)
 
         avg = reduce(lambda x, y: x + y, recognize_times) / len(recognize_times)
