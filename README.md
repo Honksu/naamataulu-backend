@@ -41,7 +41,7 @@ docker build -t naamataulu-backend:latest
 docker run --env-file .env -p 8000:8000 -it naamataulu-backend
 
 # Release (Requires crendentials to wackymemes Docker hub organization.)
-docker build -t wackymemes/naamataulu-backend:latest
+docker build -t wackymemes/naamataulu-backend:latest .
 docker push wackymemes/naamataulu-backend:latest
 ```
 
