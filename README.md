@@ -30,6 +30,8 @@ You need to setup virtualenv to make sure you are using right package versions:
 pip install virtualenv                      
 virtualenv ENV --python=/usr/bin/python3.6      # We are using Python 3.6
 source ENV/bin/activate                         # Activate environment
+sh run.sh                                       # Run the app
+sh run_tests.sh                                 # Run the tests
 ```
 
 ### Docker
