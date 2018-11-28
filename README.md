@@ -41,10 +41,18 @@ docker build -t naamataulu-backend:latest
 
 # Run
 docker run --env-file .env -p 8000:8000 -it naamataulu-backend
+```
 
-# Release (Requires crendentials to wackymemes Docker hub organization.)
-docker build -t wackymemes/naamataulu-backend:latest .
-docker push wackymemes/naamataulu-backend:latest
+Or with docker-compose
+
+```bash
+# Build & run
+docker-compose up
+
+# Running tests
+sh run_tests_compose.sh
+# or
+docker-compose run web bash -c "cd src/naamataulu && python3 manage.py test api/tests"
 ```
 
 ## Modifying the model
