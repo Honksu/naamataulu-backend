@@ -4,7 +4,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t naamataulu-backend:latest .
+  - docker build --cache-from wackymemes/naamataulu-backend:latest -t naamataulu-backend:latest .
   - docker run -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY -e DJANGO_DEBUG=$DJANGO_DEBUG -e DJANGO_SQLITE=$DJANGO_SQLITE -e DISABLE_COLLECTSTATIC=$DISABLE_COLLECTSTATIC -e WEB_CONCURRENCY=$WEB_CONCURRENCY --entrypoint '/bin/sh' naamataulu-backend:latest -c 'cd src/naamataulu && python3 manage.py test api/tests'
 
 script:
