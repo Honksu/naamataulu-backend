@@ -143,3 +143,22 @@ class UserTestCase(TestCase):
         self.assertEqual(User.objects.get(pk=1).first_name, 'Markku')
         self.assertEqual(User.objects.get(pk=1).last_name, 'Virtanen')
 
+    def test_multiple_features_on_single_user_returns_only_closest_feature(self):
+        subject = 's1'
+        faces = self.faces[subject]
+        user = User.objects.create(username=subject)
+        user.save()
+
+        for face in faces:
+            with open(face, 'rb') as data:
+                request = self.factory.post('/api/v1/users/%d' % user.id, {'faces': data}, format='multipart', HTTP_AUTHORIZATION='Token {}'.format(self.token))
+                view = UserViewSet.as_view({'post': 'enroll'})
+                response = view(request, pk=user.id)
+                self.assertEqual(response.status_code, 200)
+            
+            with open(face, 'rb') as data:
+                request = self.factory.post('/api/v1/users', {'faces': data}, format='multipart', HTTP_AUTHORIZATION='Token {}'.format(self.token))
+                view = UserViewSet.as_view({'post': 'recognize'})
+                response = view(request)
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(len(response.data), 1)
