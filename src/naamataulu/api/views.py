@@ -67,12 +67,12 @@ class UserViewSet(viewsets.ModelViewSet):
                 
                 # If something goes wrong with recognition return 404
                 try:
-                  user = f.recognize([faces])
+                  users = f.recognize([faces])
                 except:
                   return Response('User not recognized', status=404)
 
-                if user is None:
+                if users is None:
                         return Response('User not recognized', status=404)
                 else:
-                        serializer = self.get_serializer(user, many=False)
+                        serializer = self.get_serializer(users, many=True)
                         return Response(serializer.data)

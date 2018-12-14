@@ -62,6 +62,7 @@ class UserTestCase(TestCase):
 
         false_negatives = 0
         false_positives = 0
+        hard_false_positives = 0
         successful = 0
         not_recognized = 0
         no_face = 0
@@ -80,10 +81,15 @@ class UserTestCase(TestCase):
               try:
                   response = view(request)
                   if response.status_code == 200:
-                      if response.data['id'] == user.id:
+                      response_user_ids = list(map(lambda u: u['id'], response.data))
+                      print(user.id, response_user_ids)
+                      if user.id in response_user_ids:
                           successful += 1
                       else:
-                          false_positives += 1
+                          if len(response.data) > 1:
+                            false_positives += 1
+                          else:
+                            hard_false_positives += 1
                   else:   
                       false_negatives += 1
                       not_recognized += 1
@@ -99,6 +105,7 @@ class UserTestCase(TestCase):
         avg = reduce(lambda x, y: x + y, recognize_times) / len(recognize_times)
 
         print('False negatives: %s' % false_negatives)
+        print('Hard false positives: %s' % hard_false_positives)
         print('False positives: %s' % false_positives)
         print('Successful: %s' % successful)
         print('Not recognized: %s, No faces detected: %s' % (not_recognized, no_face))
@@ -135,3 +142,4 @@ class UserTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(User.objects.get(pk=1).first_name, 'Markku')
         self.assertEqual(User.objects.get(pk=1).last_name, 'Virtanen')
+

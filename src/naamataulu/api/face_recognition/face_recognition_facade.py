@@ -16,6 +16,7 @@ DEFAULT_IMPLEMENTER = 'dlib'
 MAX_FEATURES_PER_USER = 3
 MULTITHREAD = False
 PROCESS_COUNT = 4
+MAX_RECOGNIZED_USERS = 3
 
 class FaceRecognitionFacade:
     def __init__(self):
@@ -98,22 +99,18 @@ class FaceRecognitionFacade:
                       for result in results:
                           user_certainty_tuples.extend(result)
 
-        # Sort the certainties
-        start_sort = time.time()
-        user_distance_tuples = sorted(user_certainty_tuples, key= lambda tup: tup[1], reverse=False)
-        sort_time = time.time()-start_sort
+        # Filter matches to tolerance
+        user_distance_tuples = list(filter(lambda x: x[1] <= self.tolerance, user_certainty_tuples))[:MAX_RECOGNIZED_USERS]
+        user_distance_tuples = sorted(user_distance_tuples, key= lambda tup: tup[1], reverse=False)
 
-        # Most probable match
-        match_user, match_distance, face_features, implementer = user_distance_tuples[0]
+        print(list(map(lambda u: u[1], user_distance_tuples)))
 
-        # If match meets the tolerance, return match
-        if match_distance <= self.tolerance:
-            # Use already computed data if using default implementer
-            if implementer == DEFAULT_IMPLEMENTER:
-              self.add_new_features(match_user, face_features, implementer)
-            else:
-              self.enroll(face, match_user, DEFAULT_IMPLEMENTER)
-
-            return match_user
+        # Matches within tolerance
+        matches = []
+        for match_user, match_distance, face_features, implementer in user_distance_tuples:
+            matches.append(match_user)
+        
+        if len(matches) > 0:
+            return matches
         else:
             return None
