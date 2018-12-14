@@ -100,8 +100,19 @@ class FaceRecognitionFacade:
                           user_certainty_tuples.extend(result)
 
         # Filter matches to tolerance
-        user_distance_tuples = list(filter(lambda x: x[1] <= self.tolerance, user_certainty_tuples))[:MAX_RECOGNIZED_USERS]
+        user_distance_tuples = list(filter(lambda x: x[1] <= self.tolerance, user_certainty_tuples))
         user_distance_tuples = sorted(user_distance_tuples, key= lambda tup: tup[1], reverse=False)
+
+        # Filter matches to contain only one instance per user
+        user_distance_tuples_temp = []
+        added_user_ids = []
+        for user_tuple in user_distance_tuples:
+            if user_tuple[0].id not in added_user_ids:
+                added_user_ids.append(user_tuple[0].id)
+                user_distance_tuples_temp.append(user_tuple)
+
+        # Cap the list length to specified maximum
+        user_distance_tuples = user_distance_tuples_temp[:MAX_RECOGNIZED_USERS]
 
         print(list(map(lambda u: u[1], user_distance_tuples)))
 
