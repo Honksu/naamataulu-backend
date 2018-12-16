@@ -3,11 +3,18 @@ language: python
 services:
   - docker
 
+addons:
+  apt:
+    packages:
+      - docker-ce
+
 install: true
 
 script:
+  - docker --version
+  - docker debian:stretch
   - docker pull wackymemes/naamataulu-backend:latest
-  - docker build --cache-from wackymemes/naamataulu-backend:latest -t naamataulu-backend:latest .
+  - docker build --cache-from debian:stretch,wackymemes/naamataulu-backend:latest -t naamataulu-backend:latest .
   - docker run -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY -e DJANGO_DEBUG=$DJANGO_DEBUG -e DJANGO_SQLITE=$DJANGO_SQLITE -e DISABLE_COLLECTSTATIC=$DISABLE_COLLECTSTATIC -e WEB_CONCURRENCY=$WEB_CONCURRENCY --entrypoint '/bin/sh' naamataulu-backend:latest -c 'cd src/naamataulu && python3 manage.py test api/tests'
 
 after_success:
