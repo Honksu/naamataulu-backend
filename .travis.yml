@@ -12,5 +12,5 @@ install:
   - echo 'Do nothing'
   
 script:
-  - cd src/naamataulu && python3 manage.py test api/tests
+  - echo 'Do nothing'
 

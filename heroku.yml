@@ -1,3 +1,7 @@
 build:
   docker:
     web: Dockerfile
+release:
+  command:
+    - cd src/naamataulu && python3 manage.py migrate
+  image: web

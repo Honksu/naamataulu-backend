@@ -19,6 +19,5 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 ADD src ./src/
 
 CMD cd src/naamataulu && \
-    python3 manage.py migrate && \
     gunicorn naamataulu.wsgi --preload -b 0.0.0.0:$PORT
 
