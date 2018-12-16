@@ -4,4 +4,7 @@ build:
 release:
   command:
     - cd src/naamataulu && python3 manage.py migrate
-  image: web
+  image: wackymemes/naamataulu-backend:latest
+run:
+  web:
+    image: wackymemes/naamataulu-backend:latest
