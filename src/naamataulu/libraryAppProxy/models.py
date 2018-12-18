@@ -38,6 +38,7 @@ class Loan(models.Model):
   date_loaned = models.DateTimeField()
   info = models.ForeignKey(Item, on_delete=models.CASCADE)
   person = models.ForeignKey(User, on_delete=models.CASCADE)
+  returned = models.BooleanField(default=False)
 
   def __str__(self):
     return "%s loaned by %s" % (str(self.info), str(self.person))
