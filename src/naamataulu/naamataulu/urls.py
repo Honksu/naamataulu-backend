@@ -22,5 +22,6 @@ from api.views import admin_manage
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/v1/', include('api.urls')),
+    url(r'^api/v1/library/', include('libraryAppProxy.urls')),    
     url(r'^manage/', admin_manage, name='admin_manage'),
 ]
