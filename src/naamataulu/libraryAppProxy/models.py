@@ -31,12 +31,16 @@ class Item(models.Model):
   library = models.ForeignKey(Library, on_delete=models.SET_NULL, null=True)
   info = models.ForeignKey(BookInformation, on_delete=models.PROTECT)
 
+  def reserved(self):
+    itemLoanCount = Loan.objects.filter(item=self,returned=False).count()
+    return itemLoanCount > 0
+
   def __str__(self):
     return "%s @ %s" % (self.info.title, self.library.name)
 
 class Loan(models.Model):
   date_loaned = models.DateTimeField()
-  info = models.ForeignKey(Item, on_delete=models.CASCADE)
+  item = models.ForeignKey(Item, on_delete=models.CASCADE)
   person = models.ForeignKey(User, on_delete=models.CASCADE)
   returned = models.BooleanField(default=False)
 

@@ -15,7 +15,7 @@ class BookInformationSerializer(serializers.ModelSerializer):
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = '__all__'
+        fields = ('id', 'library', 'info', 'reserved')
 
 class LoanSerializer(serializers.ModelSerializer):
     class Meta:

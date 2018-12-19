@@ -1,8 +1,13 @@
-from rest_framework import viewsets, status
+from datetime import datetime
+
 from django.http import HttpResponse
 import django_filters.rest_framework
 from django.core.exceptions import ObjectDoesNotExist
+
+from rest_framework import viewsets, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
+from rest_framework.authtoken.models import Token
 
 from .serializers import LibrarySerializer, BookInformationSerializer, \
   ItemSerializer, LoanSerializer
@@ -24,7 +29,7 @@ bookByISBNGet DONE
 bookCoverGet TODO
 :: route :- BookCoverEndpoint
 
-borrowPost TODO
+borrowPost DONE
 :: route :- SSOUser :> "book" :> "borrow" :> ReqBody '[JSON] BorrowRequest :> Post '[JSON] Loan
 
 itemDelete DONE
@@ -50,20 +55,24 @@ sendReminderEmailsPost IGNORE
 '''
 
 class LibraryViewset(viewsets.ModelViewSet):
+  permission_classes = (IsAuthenticated,)
   queryset = Library.objects.all()
   serializer_class = LibrarySerializer
 
 class BookInformationViewset(viewsets.ModelViewSet):
+  permission_classes = (IsAuthenticated,)
   queryset = BookInformation.objects.all()
   serializer_class = BookInformationSerializer
   filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
   filter_fields = ('ISBN',)
 
 class ItemViewset(viewsets.ModelViewSet):
+  permission_classes = (IsAuthenticated,)
   queryset = Item.objects.all()
   serializer_class = ItemSerializer
 
 class LoanViewset(viewsets.ModelViewSet):
+  permission_classes = (IsAuthenticated,)
   queryset = Loan.objects.all().filter(returned=False)
   serializer_class = LoanSerializer
 
@@ -78,6 +87,9 @@ class LoanViewset(viewsets.ModelViewSet):
       return HttpResponse('Loan not found', 404)
 
 class LoanUserViewset(viewsets.ModelViewSet):
+  permission_classes = (IsAuthenticated,)
+  serializer_class = LoanSerializer
+
   def get_queryset(self):
     userpk = self.kwargs['userpk']
     print('userpk', userpk, self.kwargs)
@@ -88,4 +100,14 @@ class LoanUserViewset(viewsets.ModelViewSet):
 
     return Loan.objects.filter(person=user, returned=False)
 
-  serializer_class = LoanSerializer
+  @action(detail=False, methods=['post'])
+  def borrow(self, request, pk=None, userpk=None):
+    item = Item.objects.get(pk=request.data['id'])
+    if not item.reserved():
+      person = User.objects.get(pk=userpk)
+      newLoan = Loan.objects.create(date_loaned=datetime.now(), item=item, person=person)
+      return HttpResponse('Item loaned', 200)
+    else:
+      return HttpResponse('Item already loaned', 412)
+
+  
