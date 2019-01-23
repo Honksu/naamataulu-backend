@@ -15,6 +15,7 @@ DATABASE_URL=               # Address and credentials of postgres database (Foun
 DISABLE_COLLECTSTATIC=      # Set true for local
 WEB_CONCURRENCY=            # How many instances of the backend Gunicorn runs (1 is enough for local testing)
 PORT=                       # TCP port the service listens to
+ALLOWED_HOST=               # API address. (A list of strings representing the host/domain names that this Django site can serve. This is a security measure to prevent HTTP Host header attacks, which are possible even under many seemingly-safe web server configurations.)
 ```
 
 ### Without Docker
