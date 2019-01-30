@@ -17,7 +17,6 @@ RUN pip3 install --no-cache-dir dlib==19.16.0
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 ADD src ./src/
+COPY ./docker-entrypoint.sh /
 
-CMD cd src/naamataulu && \
-    gunicorn naamataulu.wsgi --preload -b 0.0.0.0:$PORT
-
+ENTRYPOINT ["./docker-entrypoint.sh"]
