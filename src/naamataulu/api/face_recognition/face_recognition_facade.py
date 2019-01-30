@@ -1,5 +1,6 @@
 import math
 import time
+import os
 from multiprocessing import Pool, Array
 
 from django.db import transaction
@@ -10,13 +11,14 @@ from .face_recognition_template import FaceRecognitionTemplateImplementer
 from .face_recognition_template import DlibFaceRecognition
 
 from api.models import FaceFeatures
+from api.environ import getEnvironmentVariable
 import numpy as np
 
-DEFAULT_IMPLEMENTER = 'dlib'
-MAX_FEATURES_PER_USER = 3
-MULTITHREAD = False
-PROCESS_COUNT = 4
-MAX_RECOGNIZED_USERS = 3
+DEFAULT_IMPLEMENTER = getEnvironmentVariable(str, 'DEFAULT_IMPLEMENTER', 'dlib')
+MAX_FEATURES_PER_USER = getEnvironmentVariable(int, 'MAX_FEATURES_PER_USER', 3)
+MULTITHREAD = getEnvironmentVariable(bool, 'MULTITHREAD', False)
+PROCESS_COUNT = getEnvironmentVariable(int, 'PROCESS_COUNT', 4)
+MAX_RECOGNIZED_USERS = getEnvironmentVariable(int, 'MAX_RECOGNIZED_USERS', 3)
 
 class FaceRecognitionFacade:
     def __init__(self):

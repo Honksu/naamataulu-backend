@@ -16,6 +16,13 @@ DISABLE_COLLECTSTATIC=      # Set true for local
 WEB_CONCURRENCY=            # How many instances of the backend Gunicorn runs (1 is enough for local testing)
 PORT=                       # TCP port the service listens to
 ALLOWED_HOST=               # Comma separated API addresses. (A list of strings representing the host/domain names that this Django site can serve. This is a security measure to prevent HTTP Host header attacks, which are possible even under many seemingly-safe web server configurations.)
+
+# Application envars and their default values
+DEFAULT_IMPLEMENTER=dlib
+MAX_FEATURES_PER_USER=3
+MULTITHREAD=0
+PROCESS_COUNT=4
+MAX_RECOGNIZED_USERS=3
 ```
 
 ### Without Docker
