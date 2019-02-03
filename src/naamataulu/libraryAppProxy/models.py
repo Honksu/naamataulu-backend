@@ -45,4 +45,4 @@ class Loan(models.Model):
   returned = models.BooleanField(default=False)
 
   def __str__(self):
-    return "%s loaned by %s" % (str(self.info), str(self.person))
+    return "%s loaned by %s" % (str(self.item), str(self.person))
